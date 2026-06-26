@@ -1,0 +1,5 @@
+Food - 200
+Travel - 150
+Shopping - 500
+cd "c:\Users\dell\Desktop\SIPP\core-java-practice\gcr-codebase\java-IO\Scenario-basedProblem\" ; if ($?) { javac ExpenseLogger.java } ; if ($?) { java ExpenseLogger } - 344
+cd "c:\Users\dell\Desktop\SIPP\core-java-practice\gcr-codebase\java-IO\Scenario-basedProblem\" ; if ($?) { javac ExpenseLogger.java } ; if ($?) { java ExpenseLogger } - 475
