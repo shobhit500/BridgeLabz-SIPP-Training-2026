@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
-
+import java.util.ArrayList;
 class Node {
     char data;
     Node left;
@@ -54,6 +54,58 @@ public class treeexample {
                 q.offer(ele.right);
         }
     }
+    public static ArrayList<Character> rightview(Node root) {
+        ArrayList<Character> rightview = new ArrayList<>();
+        // if (root == null)
+        //     return rightview;
+
+        Queue<Node> q = new LinkedList<>();
+        q.offer(root);
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            ArrayList<Character> level = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                Node ele = q.poll();
+
+                if (i == size - 1)
+                    rightview.add(ele.data);
+
+                if (ele.left != null)
+                    q.offer(ele.left);
+                if (ele.right != null)
+                    q.offer(ele.right);
+            }
+        }
+
+        return rightview;
+    }
+    public static ArrayList<Character> leftview(Node root) {
+        ArrayList<Character> leftview = new ArrayList<>();
+        // if (root == null)
+        //     return leftview;
+
+        Queue<Node> q = new LinkedList<>();
+        q.offer(root);
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            ArrayList<Character> level = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                Node ele = q.poll();
+
+                if (i == 0)
+                    leftview.add(ele.data);
+
+                if (ele.left != null)
+                    q.offer(ele.left);
+                if (ele.right != null)
+                    q.offer(ele.right);
+            }
+        }
+
+        return leftview;
+    }
     public static void main(String[] args) {
         //0
         Node root = new Node('A');
@@ -78,5 +130,9 @@ public class treeexample {
         postorder(root);
         System.out.println("\nLevel Order Traversal:");
          levelOrder(root);
+        System.out.println("\nRight View:");
+        System.out.println(rightview(root));
+        System.out.println("\nLeft View:");
+        System.out.println(leftview(root));
     }
 }
