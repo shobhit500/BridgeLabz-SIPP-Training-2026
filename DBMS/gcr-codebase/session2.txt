@@ -1,0 +1,111 @@
+-- Session 2: Keys, Constraints & Data Integrity
+
+-- Use Case 1: Define Primary Keys
+
+ALTER TABLE covid_cases
+ADD PRIMARY KEY (Country, Date);
+
+-- Output:
+Query OK, 0 rows affected
+
+-- Verify
+DESC covid_cases;
+
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| Country         | varchar(100) | NO   | PRI | NULL    |       |
+| Date            | date         | NO   | PRI | NULL    |       |
+| Confirmed_Cases | int          | YES  |     | NULL    |       |
+| Deaths          | int          | YES  |     | NULL    |       |
+| Recoveries      | int          | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+
+
+-- Use Case 2: Create Foreign Key Relationships
+
+CREATE TABLE countries (
+    Country VARCHAR(100) PRIMARY KEY,
+    Continent VARCHAR(100)
+);
+
+ALTER TABLE covid_cases
+ADD CONSTRAINT fk_country
+FOREIGN KEY (Country)
+REFERENCES countries(Country);
+
+-- Output:
+Query OK, 0 rows affected
+
+-- Verify
+SHOW CREATE TABLE covid_cases;
+
++-------------+------------------------------------------------------------------+
+| Table       | Create Table                                                     |
++-------------+------------------------------------------------------------------+
+| covid_cases | FOREIGN KEY (Country) REFERENCES countries(Country)              |
++-------------+------------------------------------------------------------------+
+
+
+-- Use Case 3: Add Constraints to Ensure Data Quality
+
+ALTER TABLE covid_cases
+MODIFY Country VARCHAR(100) NOT NULL,
+MODIFY Date DATE NOT NULL,
+MODIFY Confirmed_Cases INT NOT NULL;
+
+ALTER TABLE covid_cases
+ADD CONSTRAINT chk_deaths
+CHECK (Deaths <= Confirmed_Cases);
+
+-- Output:
+Query OK, 0 rows affected
+
+-- Verify
+SHOW CREATE TABLE covid_cases;
+
++-------------+--------------------------------------------------------------+
+| Table       | Create Table                                                 |
++-------------+--------------------------------------------------------------+
+| covid_cases | CHECK (Deaths <= Confirmed_Cases)                            |
++-------------+--------------------------------------------------------------+
+
+
+-- Use Case 4: Set Default Values
+
+ALTER TABLE covid_cases
+MODIFY Recoveries INT DEFAULT 0,
+ADD Last_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- Output:
+Query OK, 0 rows affected
+
+-- Verify
+DESC covid_cases;
+
++-----------------+---------------------+------+-----+-------------------+-------+
+| Field           | Type                | Null | Key | Default           | Extra |
++-----------------+---------------------+------+-----+-------------------+-------+
+| Recoveries      | int                 | YES  |     | 0                 |       |
+| Last_Updated    | timestamp           | YES  |     | CURRENT_TIMESTAMP |       |
++-----------------+---------------------+------+-----+-------------------+-------+
+
+
+-- Use Case 5: Prevent Duplicate Country-Date Entries
+
+ALTER TABLE covid_cases
+ADD CONSTRAINT unique_country_date
+UNIQUE (Country, Date);
+
+-- Output:
+Query OK, 0 rows affected
+
+-- Verify
+SHOW INDEX FROM covid_cases;
+
++-------------+------------+----------------------+-------------+
+| Table       | Non_unique | Key_name             | Column_name |
++-------------+------------+----------------------+-------------+
+| covid_cases | 0          | unique_country_date  | Country     |
+| covid_cases | 0          | unique_country_date  | Date        |
++-------------+------------+----------------------+-------------+
