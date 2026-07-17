@@ -1,0 +1,99 @@
+-- Session 3: Joins & Basic Queries
+
+-- Use Case 1: Find Highest Confirmed Cases using INNER JOIN
+
+SELECT c.Country, cc.Date, cc.Confirmed_Cases
+FROM covid_cases cc
+INNER JOIN countries c
+ON cc.Country = c.Country
+WHERE cc.Date = '2020-12-31'
+ORDER BY cc.Confirmed_Cases DESC
+LIMIT 1;
+
+-- Output:
+
++---------+------------+------------------+
+| Country | Date       | Confirmed_Cases  |
++---------+------------+------------------+
+| USA     | 2020-12-31 | 20047562         |
++---------+------------+------------------+
+
+
+-- Use Case 2: Join COVID Deaths and Vaccination Data
+
+SELECT d.Country, d.Total_Deaths, v.People_Vaccinated
+FROM covid_deaths d
+LEFT JOIN covid_vaccines v
+ON d.Country = v.Country;
+
+-- Output:
+
++---------+--------------+--------------------+
+| Country | Total_Deaths | People_Vaccinated  |
++---------+--------------+--------------------+
+| India   | 531920       | 950000000          |
+| USA     | 1125000      | 270000000          |
+| Brazil  | 705000       | NULL               |
++---------+--------------+--------------------+
+
+
+-- Use Case 3: Analyze Deaths by Continent
+
+SELECT ct.Continent,
+SUM(cc.Deaths) AS Total_Deaths
+FROM covid_cases cc
+INNER JOIN countries c
+ON cc.Country = c.Country
+INNER JOIN continents ct
+ON c.Continent = ct.Continent
+GROUP BY ct.Continent;
+
+-- Output:
+
++---------------+--------------+
+| Continent     | Total_Deaths |
++---------------+--------------+
+| Asia          | 950000       |
+| Europe        | 820000       |
+| North America | 1350000      |
+| South America | 980000       |
++---------------+--------------+
+
+
+-- Use Case 4: Calculate Average New Deaths Per Day
+
+SELECT Date,
+AVG(New_Deaths) AS Average_New_Deaths
+FROM covid_deaths
+GROUP BY Date
+ORDER BY Date;
+
+-- Output:
+
++------------+--------------------+
+| Date       | Average_New_Deaths |
++------------+--------------------+
+| 2020-03-15 | 8.50               |
+| 2020-03-16 | 11.20              |
+| 2020-03-17 | 13.75              |
++------------+--------------------+
+
+
+-- Use Case 5: Find Countries with Highest Infection Rates
+
+SELECT Country,
+Population,
+Confirmed_Cases,
+(Confirmed_Cases / Population) * 100 AS Infection_Rate
+FROM covid_cases
+ORDER BY Infection_Rate DESC;
+
+-- Output:
+
++---------+------------+------------------+----------------+
+| Country | Population | Confirmed_Cases  | Infection_Rate |
++---------+------------+------------------+----------------+
+| USA     | 331002651  | 103436829        | 31.25          |
+| Brazil  | 212559417  | 37600000         | 17.69          |
+| India   | 1380004385 | 45000000         | 3.26           |
++---------+------------+------------------+----------------+
