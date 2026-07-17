@@ -1,0 +1,98 @@
+
+-- Challenge 1: Create COVID Database Schema
+
+-- Task A: Create Database
+CREATE DATABASE covid_db;
+
+-- Select Database
+USE covid_db;
+
+-- Task B: Create covid_cases Table
+CREATE TABLE covid_cases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date DATE,
+    time VARCHAR(20),
+    state VARCHAR(100),
+    confirmed INT,
+    deaths INT,
+    recovered INT
+);
+
+-- Output:
+-- Query OK, 1 row affected
+-- Database changed
+-- Query OK, 0 rows affected
+
+-- Challenge 2: Insert Initial COVID Data
+
+INSERT INTO covid_cases
+(date, time, state, confirmed, deaths, recovered)
+VALUES
+('2020-03-15', '10 AM', 'India', 100, 2, 50);
+
+-- Verify
+SELECT * FROM covid_cases;
+
+-- Sample Output:
+-- +----+------------+-------+--------+-----------+--------+-----------+
+-- | id | date       | time  | state  | confirmed | deaths | recovered |
+-- +----+------------+-------+--------+-----------+--------+-----------+
+-- | 1  | 2020-03-15 | 10 AM | India  | 100       | 2      | 50        |
+-- +----+------------+-------+--------+-----------+--------+-----------+
+
+
+-- Challenge 3: Update Case Information
+
+UPDATE covid_cases
+SET confirmed = 120
+WHERE state = 'India'
+AND date = '2020-03-15';
+
+-- Verify
+SELECT * FROM covid_cases;
+
+-- Sample Output:
+-- +----+------------+-------+--------+-----------+--------+-----------+
+-- | id | date       | time  | state  | confirmed | deaths | recovered |
+-- +----+------------+-------+--------+-----------+--------+-----------+
+-- | 1  | 2020-03-15 | 10 AM | India  | 120       | 2      | 50        |
+-- +----+------------+-------+--------+-----------+--------+-----------+
+
+
+-- Challenge 4: Delete Incorrect Records
+
+DELETE FROM covid_cases
+WHERE state = 'IN';
+
+-- Verify
+SELECT * FROM covid_cases;
+
+-- Sample Output:
+-- +----+------------+-------+--------+-----------+--------+-----------+
+-- | id | date       | time  | state  | confirmed | deaths | recovered |
+-- +----+------------+-------+--------+-----------+--------+-----------+
+-- | 1  | 2020-03-15 | 10 AM | India  | 120       | 2      | 50        |
+-- +----+------------+-------+--------+-----------+--------+-----------+
+
+
+-- Challenge 5: Alter Table
+
+ALTER TABLE covid_cases
+ADD vaccination_rate FLOAT;
+
+-- Verify
+DESC covid_cases;
+
+-- Sample Output:
+-- +------------------+--------------+------+-----+---------+----------------+
+-- | Field            | Type         | Null | Key | Default | Extra          |
+-- +------------------+--------------+------+-----+---------+----------------+
+-- | id               | int          | NO   | PRI | NULL    | auto_increment |
+-- | date             | date         | YES  |     | NULL    |                |
+-- | time             | varchar(20)  | YES  |     | NULL    |                |
+-- | state            | varchar(100) | YES  |     | NULL    |                |
+-- | confirmed        | int          | YES  |     | NULL    |                |
+-- | deaths           | int          | YES  |     | NULL    |                |
+-- | recovered        | int          | YES  |     | NULL    |                |
+-- | vaccination_rate | float        | YES  |     | NULL    |                |
+-- +------------------+--------------+------+-----+---------+----------------+
